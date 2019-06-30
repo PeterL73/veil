@@ -150,6 +150,9 @@ std::unique_ptr<CBlockTemplate> BlockAssembler::CreateNewBlock(const CScript& sc
     LOCK(cs_main);
     CBlockIndex* pindexPrev = chainActive.Tip();
     if (fProofOfStake && pindexPrev->nHeight + 1 >= Params().HeightPoSStart()) {
+        //Add dummy coinstake tx as second transaction
+        pblock->vtx.emplace_back();
+
         //POS block - one coinbase is null then non null coinstake
         //POW block - one coinbase that is not null
         pblock->nTime = GetAdjustedTime();
